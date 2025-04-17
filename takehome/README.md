@@ -87,7 +87,7 @@ After obtaining the API_URL and setting the API_KEY, these should be added to th
 
 ```
 API_KEY=YOUR_API_KEY
-API_URL=https://lru2gjr24d.execute-api.us-east-1.amazonaws.com/appointments # Could change in a different deployment. This is my currently hosted lambda for this given code.
+API_URL=https://your-api-id.execute-api.us-east-1.amazonaws.com/
 ```
 
 ---
