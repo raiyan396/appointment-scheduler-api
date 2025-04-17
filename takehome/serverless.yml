@@ -1,0 +1,29 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: personal123123
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: takehomepam
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: takehomeapi
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    API_KEY: YOUR_API_KEY    # <- set your API key
+    TABLE_NAME: AppointmentsTable
+  iamRoleStatements: 
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - arn:aws:dynamodb:us-east-1:*:table/AppointmentsTable
+
+functions:
+  scheduleAppointment:
+    handler: handler.scheduleAppointment
+    events:
+      - httpApi:
+          path: /appointments
+          method: post
