@@ -1,8 +1,4 @@
-I'll write a clear, professional README in markdown format summarizing your Simple Appointment Scheduler API for PAMai, incorporating deployment, usage, endpoint, data format, and internal logic/case normalizations.
-
----
-
-# Simple Appointment Scheduler API for PAMai
+# Simple Appointment Scheduler API for PAM
 
 This API allows clients to schedule unique, non-overlapping appointments for a given location and time. The system is built using Node.js, AWS Lambda, and DynamoDB, ensuring high availability and easy deployment using the Serverless Framework.
 
@@ -12,6 +8,7 @@ This API allows clients to schedule unique, non-overlapping appointments for a g
 
 - [Features](#features)
 - [Deployment](#deployment)
+- [For Haroun](#for-haroun)
 - [API Usage](#api-usage)
 - [Request Body Schema](#request-body-schema)
 - [API Responses](#api-responses)
@@ -28,12 +25,7 @@ This API allows clients to schedule unique, non-overlapping appointments for a g
 - **DynamoDB-backed:** Appointments are persisted using AWS DynamoDB.
 - **Robust error handling:** Meaningful status codes and error messages for all user and system errors.
 
----
-## For Haroun
-
-As this API is already deployed, you shouldn't have to deploy anything yourself. To use the /takehome/test/test.js files to verify the end cases, first ensure that the .env file is populated with API_URL, as seen below, and the API_KEY, which will be shared with you. If you have any additional questions, please feel free to shoot me a message.
-
-The current endpoint is set to `https://lru2gjr24d.execute-api.us-east-1.amazonaws.com/appointments`
+--
 
 ## Deployment
 
@@ -57,6 +49,47 @@ functions:
   scheduleAppointment: serverless-http-api-dev-scheduleAppointment (x.xx kB)
 ```
 
+## For Haroun
+
+ To use the /takehome/test/test.js files to verify the end cases, first ensure that the .env file is populated with API_URL, as seen below, and the API_KEY. Furthermore in deployment, setting up a DynamoDB with the associated name specified (AppointmentsTable) was necessary. These can be modified in the serverless.yml file. Here is my serverless.yml file as an example:
+
+```
+org: personal123123
+app: takehomepam
+service: takehome
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    API_KEY: YOUR_API_KEY    # <- set your API key
+    TABLE_NAME: AppointmentsTable
+  iamRoleStatements: 
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - arn:aws:dynamodb:us-east-1:*:table/AppointmentsTable
+
+functions:
+  scheduleAppointment:
+    handler: handler.scheduleAppointment
+    events:
+      - httpApi:
+          path: /appointments
+          method: post
+
+```
+
+After obtaining the API_URL and setting the API_KEY, these should be added to the .env file as so:
+
+```
+API_KEY=YOUR_API_KEY
+API_URL=https://lru2gjr24d.execute-api.us-east-1.amazonaws.com/appointments # Could change in a different deployment. This is my currently hosted lambda for this given code.
+```
+
 ---
 ## API Usage
 
@@ -64,20 +97,16 @@ Deploy your API using the Serverless Framework as described above.
 
 Set up a .env file in your project root directory with the following entries:
 
-text
-
-Copy
-```API_URL=https://your-api-id.execute-api.us-east-1.amazonaws.com/
+```
+API_URL=https://your-api-id.execute-api.us-east-1.amazonaws.com/
 API_KEY=your_actual_api_key_here
-TABLE_NAME=your_dynamodb_table_name```
+TABLE_NAME=your_dynamodb_table_name
+```
+
 API_URL must match your deployed POST endpoint.
 API_KEY must match the value set in your Lambda configuration.
 Install dependencies if you haven’t already:
-
-text
-
-Copy
-npm install
+`npm install`
 ### Endpoint
 
 ```
@@ -124,7 +153,7 @@ Provide the following fields as JSON:
 
 - `TABLE_NAME`: Name of your DynamoDB table for storing appointments.
 - `API_KEY`: Secret key required in the `x-api-key` header.
-- `AWS_REGION`: (optional, default `"us-east-1"` in code example)
+- `API_URL`: URL of the API to set to test jest testing.
 
 ---
 
@@ -145,7 +174,7 @@ Provide the following fields as JSON:
 ## Example Request
 
 ```bash
-curl -X POST https://your-api-id.execute-api.us-east-1.amazonaws.com/ \
+curl -X POST https://lru2gjr24d.execute-api.us-east-1.amazonaws.com/appointments \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{
