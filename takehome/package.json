@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "test": "ENDPOINT=https://lru2gjr24d.execute-api.us-east-1.amazonaws.com/ API_KEY=my-hardcoded-api-key jest"
+  }
+}
